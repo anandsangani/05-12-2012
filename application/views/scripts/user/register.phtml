@@ -1,0 +1,115 @@
+<script type="text/javascript">
+	function validateRegisterForm()
+		{
+		var unm=document.forms["register"]["user_name"].value;
+		if (unm==null || unm=="")
+		  {
+		  alert("User name must be filled out");
+		  return false;
+		  }
+		var email=document.forms["register"]["user_email"].value;
+		var atpos=email.indexOf("@");
+		var dotpos=email.lastIndexOf(".");
+		if (atpos<1 || dotpos<atpos+2 || dotpos+2>=email.length)
+		  {
+		  alert("Not a valid e-mail address");
+		  return false;
+		  }
+		var pwd=document.forms["register"]["password"].value;
+		if (pwd==null || pwd=="")
+		  {
+		  alert("Password must be filled out");
+		  return false;
+		  }
+	}
+
+	function validateLoginForm()
+	{
+			
+		var uname=document.forms["login"]["username_login"].value;
+		if (uname==null || uname=="")
+		  {
+		  alert("User name must be filled out");
+		  return false;
+		  }
+		var pass=document.forms["login"]["password_login"].value;
+		if (pass==null || pass=="")
+		  {
+		  alert("Password must be filled out");
+		  return false;
+		  }
+	}
+	
+	function ajax()
+	{			
+		xmlobj = give_xmlobj();
+		var k;
+		k = "getdata.php?s=" + document.getElementById("user_name").value;
+	
+		xmlobj.open("GET",k,false);
+		xmlobj.send(null);
+		
+		document.getElementById("message").innerHTML = xmlobj.responseText;		
+	}
+
+	function give_xmlobj()
+	{
+		//new web browers
+		if(window.XMLHttpRequest)
+		{
+			return new XMLHttpRequest();
+		}
+		
+		//old web browsers
+		if(window.ActiveXObject)
+		{
+			return new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		
+		return false;
+	}	
+</script>
+<? include "header.phtml"; ?>
+  <h1><?=$this->escape($this->title);?></h1>
+  <div id="description">
+    <?=$this->escape($this->description);?>
+  </div>
+  <font size="+3"> New Users:</font>
+  <form name="register" method="post" action="<?=$this->escape($this->action)?>" onsubmit="return validateRegisterForm()">
+  <table>
+    <tr>
+	  <td><?=$this->escape($this->label_uname)?></td>
+	  <td><input type="text" name="user_name" id="user_name"></td>
+      <td><label id="message"></label></td>
+	</tr>
+    <tr>
+    	<td> <?=$this->escape($this->label_email)?></td>
+        <td><input type="text" name="user_email"></td>
+    </tr>	
+    <tr>
+	  <td><?=$this->escape($this->label_pass)?></td>
+	  <td><input type="password" name="password"></td>
+	</tr>
+    <tr>
+    	<td> <?=$this->escape($this->label_find_us)?></td>
+        <td><input type="text" name="user_find_us"></td>
+    </tr>	
+  </table>
+  <input type="submit" name="submit" value="<?php echo $this->escape($this->label_submit); ?>">
+  </form>
+  <!-- login form--- -->
+  <h1><?=$this->escape($this->title_login);?></h1>
+  <form name='login' method='post' action='<?=$this->escape($this->action_login);?>' onsubmit="return validateLoginForm()">
+  <table>
+    <tr>
+	  <td><?=$this->escape($this->username_login);?></td>
+	  <td><input type='text' name='username_login' id="username_login"></td>
+	</tr>
+    <tr>
+	  <td><?=$this->escape($this->password_login);?></td>
+	  <td><input type='password' name='password_login'></td>
+	</tr>	
+  </table>
+  <input type='submit' name='login' value='Login'>
+  </form>
+<? include "footer.phtml"; ?>
